@@ -1,0 +1,19 @@
+{{ $targetPath := . }}
+{{ println "El valor de myVar es: " $targetPath }} <br>
+
+{{ if and ( hasPrefix $targetPath (or "scss/" "sass/")) (strings.HasSuffix $targetPath (or ".scss" ".sass")) }}
+    {{ $targetPath = substr $targetPath 5 -5 }}
+    {{ $targetPath = printf "css/%s.css" $targetPath }}
+{{ end }}
+
+{{ $commonOpts := (dict "transpiler" "dartsass" ) }}
+{{ $opts := merge $commonOpts (dict "style" "compressed") }}
+
+{{ if eq hugo.Environment "development" }}
+  {{ $opts = merge $opts (dict "sourceMap" true "sourceMapRoot" "/") }}
+{{ end }}
+
+{{ $css := resources.Get . }}
+{{ $css = $css | toCSS $opts }}
+
+<link rel="stylesheet" href="{{ $css.RelPermalink }}"> 

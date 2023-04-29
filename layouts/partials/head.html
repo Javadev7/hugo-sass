@@ -1,11 +1,8 @@
 <title>{{ .Title }}</title>
 
-{{ $opts := (dict "transpiler" "libsass" "outputStyle" "compressed" "includePaths" (slice "node_modules" )) }}
-{{ if eq hugo.Environment "development" }}
-  {{ $opts = (dict "transpiler" "libsass" "enableSourceMap" true "includePaths" (slice "node_modules") )  }}
-{{ end }}
+{{/* ? Usamos el partial y le pasamos el contesto el cual es el string de la ruta del main.scss  */}}
+{{/*  {{ partial "libsass" "scss/main.scss" }}
+{{ partial "libsass" "scss/footer.scss" }}  */}}
 
-{{ $css := resources.Get "scss/main.scss" }}
-{{ $css = $css | resources.ToCSS $opts}}
-
-<link rel="stylesheet" href="{{ $css.RelPermalink}}"> 
+{{ partial "dartsass" "scss/main.scss" }}
+{{ partial "dartsass" "scss/footer.scss" }}
